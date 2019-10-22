@@ -23,8 +23,10 @@ limitations under the License.
 #include "tensorflow/lite/builtin_ops.h"
 #include "tensorflow/lite/delegates/gpu/api.h"
 #include "tensorflow/lite/delegates/gpu/cl/api.h"
-#include "tensorflow/lite/delegates/gpu/cl/opencl_wrapper.h"
-#include "tensorflow/lite/delegates/gpu/cl/tensor_type_util.h"
+#if defined(TFLITE_GPU_DELEGATE_CL_ENABLED)
+# include "tensorflow/lite/delegates/gpu/cl/opencl_wrapper.h"
+# include "tensorflow/lite/delegates/gpu/cl/tensor_type_util.h"
+#endif
 #include "tensorflow/lite/delegates/gpu/common/model.h"
 #include "tensorflow/lite/delegates/gpu/common/model_builder.h"
 #include "tensorflow/lite/delegates/gpu/common/model_transformer.h"
@@ -78,12 +80,16 @@ class Delegate {
     }
 
     std::unique_ptr<InferenceBuilder> builder;
+#if defined(TFLITE_GPU_DELEGATE_CL_ENABLED)
     Status status = InitializeOpenClApi(&graph, &builder);
     if (!status.ok()) {
       context->ReportError(context, "%s", status.error_message().c_str());
       context->ReportError(context, "Falling back to OpenGL");
       RETURN_IF_ERROR(InitializeOpenGlApi(&graph, &builder));
     }
+#else
+    RETURN_IF_ERROR(InitializeOpenGlApi(&graph, &builder));
+#endif
 
     // At this point tflite didn't allocate tensors yet, therefore, collect
     // indices and set all input and output tensors from tflite later.
@@ -141,6 +147,7 @@ class Delegate {
   TfLiteDelegate* tflite_delegate() { return &delegate_; }
 
  private:
+#if defined(TFLITE_GPU_DELEGATE_CL_ENABLED)
   Status InitializeOpenClApi(GraphFloat32* graph,
                              std::unique_ptr<InferenceBuilder>* builder) {
     cl::InferenceEnvironmentOptions env_options;
@@ -155,6 +162,7 @@ class Delegate {
                          "Initialized OpenCL-based API.");
     return OkStatus();
   }
+#endif
 
   Status InitializeOpenGlApi(GraphFloat32* graph,
                              std::unique_ptr<InferenceBuilder>* builder) {
