@@ -20,7 +20,7 @@ limitations under the License.
 #include <unordered_set>
 #include <vector>
 
-#if defined(__ANDROID__)
+#if defined(__ANDROID__) || defined(TFLITE_GPU_DELEGATE_ENABLED)
 #include "tensorflow/lite/delegates/gpu/delegate.h"
 #endif
 
