@@ -65,7 +65,9 @@ TfLiteStatus GetSortedFileNames(
   std::string dir_path = StripTrailingSlashes(directory);
   if ((dir = opendir(dir_path.c_str())) != nullptr) {
     while ((ent = readdir(dir)) != nullptr) {
+#ifndef __QNX__
       if (ent->d_type == DT_DIR) continue;
+#endif
       std::string filename(std::string(ent->d_name));
       size_t lastdot = filename.find_last_of(".");
       std::string ext = lastdot != std::string::npos ? filename.substr(lastdot)
@@ -119,7 +121,7 @@ Interpreter::TfLiteDelegatePtr CreateGPUDelegate(
 
 Interpreter::TfLiteDelegatePtr CreateGPUDelegate(
     tflite::FlatBufferModel* model) {
-#if defined(__ANDROID__) || defined(TFLITE_GPU_DELEGATE_ENABLED)
+#if defined(__ANDROID__) || defined(TFLITE_GPU_DELEGATE_ENABLED)
   TfLiteGpuDelegateOptionsV2 options = TfLiteGpuDelegateOptionsV2Default();
   options.inference_priority1 = TFLITE_GPU_INFERENCE_PRIORITY_MIN_LATENCY;
   options.inference_preference =
