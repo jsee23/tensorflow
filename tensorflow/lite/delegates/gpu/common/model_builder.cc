@@ -1134,6 +1134,7 @@ class ElementwiseOperationParser : public TFLiteOperationParser {
     switch (operation_type_) {
       case OperationType::ABS:
       case OperationType::COS:
+      case OperationType::EXP:
       case OperationType::LOG:
       case OperationType::RSQRT:
       case OperationType::SIGMOID:
@@ -2263,6 +2264,8 @@ std::unique_ptr<TFLiteOperationParser> NewOperationParser(
       return absl::make_unique<DepthwiseConvolutionOperationParser>();
     case kTfLiteBuiltinDiv:
       return absl::make_unique<ElementwiseOperationParser>(OperationType::DIV);
+    case kTfLiteBuiltinExp:
+      return absl::make_unique<ElementwiseOperationParser>(OperationType::EXP);
     case kTfLiteBuiltinFullyConnected:
       return absl::make_unique<FullyConnectedOperationParser>();
     case kTfLiteBuiltinHardSwish:
