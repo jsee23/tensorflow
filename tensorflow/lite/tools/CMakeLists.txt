@@ -220,6 +220,7 @@ if(${ENABLE_GLES_DELEGATE})
     ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/kernels/fully_connected.cc
     ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/kernels/pad.cc
     ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/kernels/mul.cc
+    ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/kernels/reduce.cc
     ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/kernels/relu.cc
     ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/kernels/reshape.cc
     ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/kernels/resize.cc

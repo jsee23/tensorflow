@@ -57,6 +57,7 @@ enum class OperationType {
   POOLING_2D,
   POW,
   PRELU,
+  REDUCE_MAX,
   RELU,
   RESHAPE,
   RESIZE,
