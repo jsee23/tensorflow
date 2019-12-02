@@ -222,6 +222,7 @@ if(${ENABLE_GLES_DELEGATE})
     ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/kernels/mul.cc
     ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/kernels/relu.cc
     ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/kernels/reshape.cc
+    ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/kernels/resize.cc
     ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/kernels/registry.cc
     ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/kernels/elementwise.cc
     ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/kernels/pooling.cc

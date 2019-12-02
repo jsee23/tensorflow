@@ -41,6 +41,7 @@ limitations under the License.
 #include "tensorflow/lite/delegates/gpu/gl/kernels/prelu.h"
 #include "tensorflow/lite/delegates/gpu/gl/kernels/relu.h"
 #include "tensorflow/lite/delegates/gpu/gl/kernels/reshape.h"
+#include "tensorflow/lite/delegates/gpu/gl/kernels/resize.h"
 #include "tensorflow/lite/delegates/gpu/gl/kernels/slice.h"
 #include "tensorflow/lite/delegates/gpu/gl/kernels/softmax.h"
 #include "tensorflow/lite/delegates/gpu/gl/kernels/transpose_conv.h"
@@ -86,6 +87,7 @@ class Registry : public NodeShader {
     insert_op(Type::PRELU, NewPReLUNodeShader);
     insert_op(Type::RELU, NewReLUNodeShader);
     insert_op(Type::RESHAPE, NewReshapeNodeShader);
+    insert_op(Type::RESIZE_NEAREST_NEIGHBOR, NewResizeNearestNeighborNodeShader);
     insert_op(Type::SLICE, NewSliceNodeShader);
     insert_op(Type::SOFTMAX, NewSoftmaxNodeShader);
     insert_op(Type::UPSAMPLE_2D, NewUpsamplingNodeShader);

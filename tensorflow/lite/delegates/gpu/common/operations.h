@@ -60,6 +60,7 @@ enum class OperationType {
   RELU,
   RESHAPE,
   RESIZE,
+  RESIZE_NEAREST_NEIGHBOR,
   RSQRT,
   SIGMOID,
   SIN,

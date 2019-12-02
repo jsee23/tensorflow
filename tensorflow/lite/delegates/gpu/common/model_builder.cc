@@ -1610,6 +1610,25 @@ class Pooling2DOperationParser : public TFLiteOperationParser {
   const PoolingType type_;
 };
 
+class ResizeOperationParser : public TFLiteOperationParser {
+  public:
+  Status IsSupported(const TfLiteContext* context,
+                     const TfLiteNode* tflite_node,
+                     const TfLiteRegistration* registration) final {
+    return OkStatus();
+  }
+
+  Status Parse(const TfLiteNode* tflite_node,
+               const TfLiteRegistration* registration, GraphFloat32* graph,
+               ObjectReader* reader) final {
+    auto* node = graph->NewNode();
+    node->operation.type = ToString(OperationType::RESIZE_NEAREST_NEIGHBOR);
+    RETURN_IF_ERROR(reader->AddInput(node, 0));
+    RETURN_IF_ERROR(reader->AddOutputs(node));
+    return OkStatus();
+  }
+};
+
 class ReLUOperationParser : public TFLiteOperationParser {
  public:
   explicit ReLUOperationParser(int clip) : clip_(clip) {}
@@ -2285,6 +2304,8 @@ std::unique_ptr<TFLiteOperationParser> NewOperationParser(
       return absl::make_unique<PadOperationParser>();
     case kTfLiteBuiltinPow:
       return absl::make_unique<ElementwiseOperationParser>(OperationType::POW);
+    case kTfLiteBuiltinResizeNearestNeighbor:
+      return absl::make_unique<ResizeOperationParser>();
     case kTfLiteBuiltinRelu:
       return absl::make_unique<ReLUOperationParser>(0);
     case kTfLiteBuiltinRelu6:

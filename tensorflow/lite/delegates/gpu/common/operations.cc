@@ -100,6 +100,8 @@ std::string ToString(enum OperationType op) {
       return "reshape";
     case OperationType::RESIZE:
       return "resize";
+    case OperationType::RESIZE_NEAREST_NEIGHBOR:
+      return "resize_nearest_neighbor";
     case OperationType::RSQRT:
       return "rsqrt";
     case OperationType::SIGMOID:
@@ -160,6 +162,7 @@ OperationType OperationTypeFromString(const std::string& name) {
           {"prelu", OperationType::PRELU},
           {"relu", OperationType::RELU},
           {"resize", OperationType::RESIZE},
+          {"resize_nearest_neighbor", OperationType::RESIZE_NEAREST_NEIGHBOR},
           {"reshape", OperationType::RESHAPE},
           {"rsqrt", OperationType::RSQRT},
           {"sigmoid", OperationType::SIGMOID},
