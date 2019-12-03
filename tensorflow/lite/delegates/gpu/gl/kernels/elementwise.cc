@@ -124,6 +124,9 @@ class ElementwiseTwoArguments : public NodeShader {
 
     // Shapes must be the same
     if (shape0 != shape1) {
+      if (shape0.h == shape1.h && shape0.w == shape1.w)
+        // TODO: warn about "special" case...
+        return true;
       return false;
     }
 
