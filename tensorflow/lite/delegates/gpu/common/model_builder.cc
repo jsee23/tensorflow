@@ -1625,7 +1625,7 @@ class ReduceOperationParser : public TFLiteOperationParser {
     node->operation.type = ToString(OperationType::REDUCE_MAX);
     RETURN_IF_ERROR(reader->AddInput(node, 0));
     RETURN_IF_ERROR(reader->AddOutputs(node));
-    
+
     return OkStatus();
   }
 };
@@ -2054,6 +2054,26 @@ class StridedSliceOperationParser : public TFLiteOperationParser {
   }
 };
 
+class SumOperationParser : public TFLiteOperationParser {
+  public:
+  Status IsSupported(const TfLiteContext* context,
+                     const TfLiteNode* tflite_node,
+                     const TfLiteRegistration* registration) final {
+    return OkStatus();
+  }
+
+  Status Parse(const TfLiteNode* tflite_node,
+               const TfLiteRegistration* registration, GraphFloat32* graph,
+               ObjectReader* reader) final {
+    auto* node = graph->NewNode();
+    node->operation.type = ToString(OperationType::SUM);
+    RETURN_IF_ERROR(reader->AddInput(node, 0));
+    RETURN_IF_ERROR(reader->AddOutputs(node));
+
+    return OkStatus();
+  }
+};
+
 class TransposeConvOperationParser : public TFLiteOperationParser {
  public:
   Status IsSupported(const TfLiteContext* context,
@@ -2361,6 +2381,8 @@ std::unique_ptr<TFLiteOperationParser> NewOperationParser(
           OperationType::SQUARED_DIFF);
     case kTfLiteBuiltinSub:
       return absl::make_unique<ElementwiseOperationParser>(OperationType::SUB);
+    case kTfLiteBuiltinSum:
+      return absl::make_unique<SumOperationParser>();
     case kTfLiteBuiltinTanh:
       return absl::make_unique<ElementwiseOperationParser>(OperationType::TANH);
     case kTfLiteBuiltinTranspose:

@@ -72,6 +72,7 @@ enum class OperationType {
   SQUARE,
   SQUARED_DIFF,
   SUB,
+  SUM,
   TANH,
   TRANSPOSE,
   UPSAMPLE_2D,

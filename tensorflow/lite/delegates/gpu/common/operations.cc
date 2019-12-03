@@ -124,6 +124,8 @@ std::string ToString(enum OperationType op) {
       return "squared_diff";
     case OperationType::SUB:
       return "subtract";
+    case OperationType::SUM:
+      return "sum";
     case OperationType::TANH:
       return "tanh";
     case OperationType::TRANSPOSE:
@@ -176,6 +178,7 @@ OperationType OperationTypeFromString(const std::string& name) {
           {"square", OperationType::SQUARE},
           {"squared_diff", OperationType::SQUARED_DIFF},
           {"subtract", OperationType::SUB},
+          {"sum", OperationType::SUM},
           {"tanh", OperationType::TANH},
           {"transpose", OperationType::TRANSPOSE},
           {"upsample_2d", OperationType::UPSAMPLE_2D},

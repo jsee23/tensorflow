@@ -228,6 +228,7 @@ if(${ENABLE_GLES_DELEGATE})
     ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/kernels/elementwise.cc
     ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/kernels/pooling.cc
     ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/kernels/slice.cc
+    ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/kernels/sum.cc
     ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/kernels/concat.cc
     ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/kernels/upsampling_bilinear.cc
     ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/kernels/add.cc

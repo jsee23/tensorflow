@@ -45,6 +45,7 @@ limitations under the License.
 #include "tensorflow/lite/delegates/gpu/gl/kernels/resize.h"
 #include "tensorflow/lite/delegates/gpu/gl/kernels/slice.h"
 #include "tensorflow/lite/delegates/gpu/gl/kernels/softmax.h"
+#include "tensorflow/lite/delegates/gpu/gl/kernels/sum.h"
 #include "tensorflow/lite/delegates/gpu/gl/kernels/transpose_conv.h"
 #include "tensorflow/lite/delegates/gpu/gl/kernels/upsampling_bilinear.h"
 
@@ -91,6 +92,7 @@ class Registry : public NodeShader {
     insert_op(Type::RESHAPE, NewReshapeNodeShader);
     insert_op(Type::RESIZE_NEAREST_NEIGHBOR, NewResizeNearestNeighborNodeShader);
     insert_op(Type::SLICE, NewSliceNodeShader);
+    insert_op(Type::SUM, NewSumNodeShader);
     insert_op(Type::SOFTMAX, NewSoftmaxNodeShader);
     insert_op(Type::UPSAMPLE_2D, NewUpsamplingNodeShader);
 
