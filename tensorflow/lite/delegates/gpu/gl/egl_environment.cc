@@ -20,15 +20,52 @@ limitations under the License.
 #include "tensorflow/lite/delegates/gpu/gl/gl_call.h"
 #include "tensorflow/lite/delegates/gpu/gl/request_gpu_info.h"
 
+#if defined(TFLITE_CONFIG_GPU_EGL_GBM)
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
+# include <EGL/eglplatform.h>
+# include <gbm.h>
+#endif // defined(TFLITE_CONFIG_GPU_EGL_GBM)
+
 namespace tflite {
 namespace gpu {
 namespace gl {
 namespace {
 
+#if defined(TFLITE_CONFIG_GPU_EGL_GBM)
+struct gbm_device* gbm_device;
+struct gbm_surface *gbm_surface;
+static EGLint attributes[] = {
+  EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT_KHR,
+  EGL_NONE
+};
+static const EGLint context_attribs[] = {
+  EGL_CONTEXT_CLIENT_VERSION, 3,
+  EGL_NONE
+};
+static int match_config_to_visual(EGLDisplay egl_display, EGLint visual_id, EGLConfig *configs, int count) {
+  EGLint id;
+  for (int i = 0; i < count; ++i) {
+    if (!eglGetConfigAttrib(egl_display, configs[i], EGL_NATIVE_VISUAL_ID,&id)) continue;
+      if (id == visual_id) return i;
+  }
+  return -1;
+}
+#endif // defined(TFLITE_CONFIG_GPU_EGL_GBM)
+
 // TODO(akulik): detect power management event when all contexts are destroyed
 // and OpenGL ES is reinitialized. See eglMakeCurrent
 
 Status InitDisplay(EGLDisplay* egl_display) {
+#if defined(TFLITE_CONFIG_GPU_EGL_GBM)
+  bool is_initialized;
+  int device = open("/dev/dri/card0", O_RDWR);
+  gbm_device = gbm_create_device(device);
+  *egl_display = eglGetPlatformDisplay(EGL_PLATFORM_GBM_MESA, gbm_device, nullptr);
+  RETURN_IF_ERROR(TFLITE_GPU_CALL_EGL(eglInitialize, &is_initialized,
+                                      *egl_display, nullptr, nullptr));
+#else
   RETURN_IF_ERROR(
       TFLITE_GPU_CALL_EGL(eglGetDisplay, egl_display, EGL_DEFAULT_DISPLAY));
   if (*egl_display == EGL_NO_DISPLAY) {
@@ -37,6 +74,7 @@ Status InitDisplay(EGLDisplay* egl_display) {
   bool is_initialized;
   RETURN_IF_ERROR(TFLITE_GPU_CALL_EGL(eglInitialize, &is_initialized,
                                       *egl_display, nullptr, nullptr));
+#endif // defined(TFLITE_CONFIG_GPU_EGL_GBM)
   if (!is_initialized) {
     return InternalError("No EGL error, but eglInitialize failed");
   }

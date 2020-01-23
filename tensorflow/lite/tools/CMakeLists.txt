@@ -183,6 +183,9 @@ target_include_directories(tensorflow-lite PRIVATE
   ${TENSORFLOW_LITE_DIR}/tools/make/downloads/neon_2_sse
   ${TENSORFLOW_LITE_DIR}/tools/make/downloads/farmhash/src
 )
+target_include_directories(tensorflow-lite PUBLIC
+  ${TENSORFLOW_LITE_DIR}/tools/make/downloads/absl
+)
 target_link_libraries(tensorflow-lite PUBLIC
   stdc++ m z
 )
@@ -266,14 +269,13 @@ if(${TFLITE_DELEGATE_GL})
     # headers
     ${TENSORFLOW_LITE_DIR}/delegates/gpu/gl/metadata_generated.h
   )
-  set(GL_DELEGATE_LIBS
-    EGL GLESv2
-  )
-  set(GL_DELEGATE_DEFINES
-    "-DTFLITE_CONFIG_GPU_GL"
-  )
-  set(GL_DELEGATE_LIBS    EGL GLESv2)
-  set(GL_DELEGATE_DEFINES "-DTFLITE_CONFIG_GPU_GL")
+  if(${TFLITE_DELEGATE_GL_GBM})
+    set(GL_DELEGATE_LIBS    EGL GLESv2 gbm)
+    set(GL_DELEGATE_DEFINES -DTFLITE_CONFIG_GPU_GL -DTFLITE_CONFIG_GPU_EGL_GBM)
+  else()
+    set(GL_DELEGATE_LIBS    EGL GLESv2)
+    set(GL_DELEGATE_DEFINES -DTFLITE_CONFIG_GPU_GL)
+  endif()
 endif()
 
 #### OpenCL delegate
