@@ -111,7 +111,7 @@ Interpreter::TfLiteDelegatePtr CreateNNAPIDelegate(
 #endif  // defined(__ANDROID__)
 }
 
-#if defined(__ANDROID__) || defined(TFLITE_CONFIG_GPU_GLES)
+#if defined(__ANDROID__) || defined(TFLITE_CONFIG_GPU_GL)
 Interpreter::TfLiteDelegatePtr CreateGPUDelegate(
     tflite::FlatBufferModel* model, TfLiteGpuDelegateOptionsV2* options) {
   return Interpreter::TfLiteDelegatePtr(TfLiteGpuDelegateV2Create(options),
@@ -121,7 +121,7 @@ Interpreter::TfLiteDelegatePtr CreateGPUDelegate(
 
 Interpreter::TfLiteDelegatePtr CreateGPUDelegate(
     tflite::FlatBufferModel* model) {
-#if defined(__ANDROID__) || defined(TFLITE_CONFIG_GPU_GLES)
+#if defined(__ANDROID__) || defined(TFLITE_CONFIG_GPU_GL)
   TfLiteGpuDelegateOptionsV2 options = TfLiteGpuDelegateOptionsV2Default();
   options.inference_priority1 = TFLITE_GPU_INFERENCE_PRIORITY_MIN_LATENCY;
   options.inference_preference =
